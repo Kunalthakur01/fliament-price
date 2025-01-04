@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>3D Printing Calculator</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+  <div class="container">
+    <h1>3D Printing Cost Calculator</h1>
+    <div class="upload-area">
+      <input type="file" id="modelFile" accept=".stl,.obj">
+      <label for="modelFile">Upload 3D Model (.STL, .OBJ)</label>
+    </div>
+    <div class="material-options">
+      <label for="materialType">Material Type:</label>
+      <select id="materialType">
+        <option value="PLA">PLA</option>
+        <option value="ABS">ABS</option>
+        <option value="PETG">PETG</option>
+        <option value="Nylon">Nylon</option>
+      </select>
+      <label for="filamentCost">Filament Cost per kg:</label>
+      <input type="number" id="filamentCost" value="20">
+    </div>
+    <div class="print-settings">
+      <label for="infillPercentage">Infill Percentage:</label>
+      <input type="number" id="infillPercentage" value="20">
+      <label for="layerHeight">Layer Height:</label>
+      <input type="number" id="layerHeight" value="0.2">
+    </div>
+    <button id="calculateButton">Calculate</button>
+    <div class="results">
+      <h2>Estimated Filament Usage and Costs</h2>
+      <p>Filament Usage: <span id="filamentUsage"></span> kg</p>
+      <p>Estimated Cost: $<span id="estimatedCost"></span></p>
+      <div id="visualization"></div>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+
+</html>
