@@ -8,38 +8,64 @@ const filamentUsage = document.getElementById('filamentUsage');
 const estimatedCost = document.getElementById('estimatedCost');
 const visualization = document.getElementById('visualization');
 
+// Update infill percentage output
+function updateInfillOutput() {
+    const output = document.querySelector('output[for="infillPercentage"]');
+    if (output && infillPercentage) {
+        output.textContent = `${infillPercentage.value}%`;
+    }
+}
+
+// Initialize infill percentage output
+updateInfillOutput();
+
+// Add event listener for infill percentage change
+if (infillPercentage) {
+    infillPercentage.addEventListener('input', updateInfillOutput);
+}
+
 calculateButton.addEventListener('click', () => {
-  const file = modelFile.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      // You will need to implement the logic to analyze the 3D model file
-      // to estimate filament usage based on volume, infill percentage, etc.
-      const estimatedUsage = calculateFilamentUsage(event.target.result); // Implement this function
-      filamentUsage.textContent = estimatedUsage;
-      
-      // Get the exchange rate from USD to INR
-      fetch('https://api.exchangerate-api.com/v4/latest/USD') // Replace with your actual API URL
-        .then(response => response.json())
-        .then(data => {
-          const exchangeRate = data.rates.INR;
-          const estimatedCostINR = estimatedUsage * parseFloat(filamentCost.value) * exchangeRate;
-          estimatedCost.textContent = estimatedCostINR; // Display the cost in INR
-        });
-      
-      // You can also implement 3D visualization and printing time estimation here
-      // using libraries like Three.js or other suitable tools.
-    };
-    reader.readAsText(file);
-  } else {
-    alert('Please upload a 3D model file.');
-  }
+    const file = modelFile.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            // Simulated filament usage calculation (replace with actual implementation)
+            const estimatedUsage = calculateFilamentUsage(event.target.result);
+            filamentUsage.textContent = `${estimatedUsage.toFixed(2)} kg`;
+            
+            const cost = estimatedUsage * parseFloat(filamentCost.value);
+            estimatedCost.textContent = `₹ ${cost.toFixed(2)}`;
+            
+            // Simulated visualization (replace with actual implementation)
+            visualize(estimatedUsage);
+        };
+        reader.readAsArrayBuffer(file);
+    } else {
+        alert('Please upload a 3D model file.');
+    }
 });
 
 // Placeholder function for filament usage calculation
 function calculateFilamentUsage(modelData) {
-  // Implement your logic here based on the model data and print settings
-  // For example, you could estimate volume, then adjust for infill and layer height
-  // Return the estimated filament usage in kg.
-  return 0.5; // Replace with actual calculation
+    // Implement your logic here based on the model data and print settings
+    // For this example, we'll use a simple random number
+    return Math.random() * 0.5 + 0.1;
 }
+
+// Placeholder function for visualization
+function visualize(usage) {
+    // Implement your visualization logic here
+    // For this example, we'll just change the background color based on usage
+    const hue = Math.min(120, 120 - usage * 100);
+    visualization.style.backgroundColor = `hsl(${hue}, 80%, 60%)`;
+}
+
+// File name display
+modelFile.addEventListener('change', (event) => {
+    const fileName = event.target.files[0]?.name || 'No file selected';
+    const fileLabel = document.querySelector('.file-label');
+    if (fileLabel) {
+        fileLabel.textContent = fileName;
+    }
+});
+
